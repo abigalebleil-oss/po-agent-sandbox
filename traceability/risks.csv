@@ -1,0 +1,4 @@
+id,description,severity,mitigation
+RISK-001,Result with invalid QC is released to the LIS and used for patient care,high,Override blocked on QC reject; QC-warning override restricted to Supervisor role with reason
+RISK-002,Manual release cannot be attributed to a person or reason during inspection,medium,All overrides written to hash-chained audit log with user ID and reason
+RISK-003,LIS interface engine misinterprets or rejects the new held-status message,medium,Use only standard HL7 v2.5 segments; interface validation with LIS admin before release

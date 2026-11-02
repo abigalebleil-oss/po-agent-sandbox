@@ -52,4 +52,28 @@ to move from messy user input to reviewed, traceable, codebase-aware requirement
 Requires Python 3.10+ and `pytest`.
 
 ```bash
-# 1. The fictional codebase and the guardrails both have passing
+# 1. The fictional codebase and the guardrails both have passing tests
+python -m pytest -q
+
+# 2. Build the code index the AI is grounded on
+python workflow/build_code_index.py
+
+# 3. Check AI outputs: the good one passes, the hallucinated one fails
+python workflow/verify_citations.py examples/impact_analysis_good.md
+python workflow/verify_citations.py examples/impact_analysis_hallucinated.md
+
+# 4. Check traceability coverage
+python workflow/trace_check.py
+```
+
+## Planted on purpose
+- `examples/impact_analysis_hallucinated.md` cites a function and a file that don't exist, plus
+  an unknown risk ID. The verifier fails it.
+- `REQ-004` has no verifying test and uses the untestable word "promptly". `trace_check.py`
+  catches the missing test; the traceability-review skill catches the vague wording.
+  Code catches what is checkable; AI and humans judge what isn't.
+
+## What the verifier checks
+1. Every `path::function` citation exists in the code index.
+2. Every REQ/RISK/TEST ID exists in the traceability CSVs.
+3. Every quote attributed to a user appears verbatim in the cited feedback file.

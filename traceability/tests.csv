@@ -1,0 +1,5 @@
+id,title,requirement_ids
+TEST-001,Held result shows QC rule and severity on worklist,REQ-001
+TEST-002,Supervisor override on QC-warning hold requires ID and reason and writes audit entry,REQ-002
+TEST-003,Override is unavailable for QC-reject hold,REQ-002
+TEST-004,Held result produces valid HL7 non-final message with NTE hold reason,REQ-003

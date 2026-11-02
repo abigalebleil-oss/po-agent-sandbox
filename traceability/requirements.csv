@@ -1,0 +1,5 @@
+id,title,text,source,risk_ids,status
+REQ-001,Show hold reason,"When a patient result is held, the technologist worklist shall display the hold reason, including the QC rule violated and its severity.",01_night_shift_tech.md,RISK-001,draft
+REQ-002,Supervised override of QC-warning hold,"A user with the Supervisor role shall be able to release a result held for a QC warning only after entering their user ID and a free-text reason; the override shall be recorded in the audit log. Override shall not be available for results held due to a QC reject.",02_lab_supervisor.md,RISK-001;RISK-002,draft
+REQ-003,Send held status to LIS,"When a result is held, LabBridge shall send the LIS a standard HL7 v2.5 message indicating the result is not final, with the hold reason in an NTE segment.",03_lis_admin.md,RISK-003,draft
+REQ-004,Notify on hold,The technologist shall be notified promptly when a result is held.,01_night_shift_tech.md,RISK-001,draft

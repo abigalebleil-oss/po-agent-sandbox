@@ -1,0 +1,129 @@
+{
+  "generated_from": "sandbox_codebase/labbridge",
+  "files": {
+    "sandbox_codebase/labbridge/__init__.py": {
+      "module_doc": "LabBridge: a fictional, simplified instrument-to-LIS middleware used as a demo codebase.",
+      "symbols": {}
+    },
+    "sandbox_codebase/labbridge/astm_parser.py": {
+      "module_doc": "Parse simplified ASTM E1394-style records sent by an analyzer.",
+      "symbols": {
+        "ASTMParseError": {
+          "kind": "class",
+          "line": 15,
+          "doc": "Raised when a record cannot be parsed."
+        },
+        "parse_test_code": {
+          "kind": "function",
+          "line": 19,
+          "doc": "Extract the test code from a universal test ID like '^^^GLU'."
+        },
+        "parse_reference_range": {
+          "kind": "function",
+          "line": 28,
+          "doc": "Turn '3.9 to 6.1' into (3.9, 6.1). Returns None if the field is empty."
+        },
+        "parse_result_record": {
+          "kind": "function",
+          "line": 38,
+          "doc": "Parse one 'R' record into a result dictionary."
+        },
+        "parse_message": {
+          "kind": "function",
+          "line": 56,
+          "doc": "Parse a full ASTM message. Returns {'patient_id': str|None, 'results': [..]}."
+        }
+      }
+    },
+    "sandbox_codebase/labbridge/audit_log.py": {
+      "module_doc": "Append-only, hash-chained audit log.",
+      "symbols": {
+        "AuditLog": {
+          "kind": "class",
+          "line": 11,
+          "doc": ""
+        },
+        "AuditLog.__init__": {
+          "kind": "method",
+          "line": 12,
+          "doc": ""
+        },
+        "AuditLog._hash": {
+          "kind": "method",
+          "line": 15,
+          "doc": ""
+        },
+        "AuditLog.record": {
+          "kind": "method",
+          "line": 18,
+          "doc": ""
+        },
+        "AuditLog.verify_chain": {
+          "kind": "method",
+          "line": 31,
+          "doc": ""
+        }
+      }
+    },
+    "sandbox_codebase/labbridge/hl7_export.py": {
+      "module_doc": "Build a simplified HL7 v2.5 ORU^R01 (observation result) message for the LIS.",
+      "symbols": {
+        "build_msh": {
+          "kind": "function",
+          "line": 6,
+          "doc": ""
+        },
+        "build_pid": {
+          "kind": "function",
+          "line": 10,
+          "doc": ""
+        },
+        "build_obx": {
+          "kind": "function",
+          "line": 14,
+          "doc": ""
+        },
+        "build_oru_r01": {
+          "kind": "function",
+          "line": 26,
+          "doc": "Only released results should be passed in; held results never leave LabBridge."
+        }
+      }
+    },
+    "sandbox_codebase/labbridge/qc_rules.py": {
+      "module_doc": "Westgard quality-control rules applied to a run of QC measurements.",
+      "symbols": {
+        "z_scores": {
+          "kind": "function",
+          "line": 16,
+          "doc": ""
+        },
+        "check_qc_run": {
+          "kind": "function",
+          "line": 22,
+          "doc": "Return a list of violations like {'rule': '1-3s', 'severity': 'reject', 'index': 2}."
+        },
+        "qc_status": {
+          "kind": "function",
+          "line": 40,
+          "doc": "Summarize a QC run as 'pass', 'warning' or 'reject'."
+        }
+      }
+    },
+    "sandbox_codebase/labbridge/result_validator.py": {
+      "module_doc": "Decide whether a patient result can be auto-released to the LIS or must be held for review.",
+      "symbols": {
+        "range_flag": {
+          "kind": "function",
+          "line": 7,
+          "doc": "Return 'L', 'H' or 'N' against a (low, high) reference range; None if no range."
+        },
+        "validate_result": {
+          "kind": "function",
+          "line": 19,
+          "doc": "Return (decision, reasons)."
+        }
+      }
+    }
+  }
+}
