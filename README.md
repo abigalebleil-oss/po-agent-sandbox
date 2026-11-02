@@ -3,6 +3,12 @@
 A working, shareable reconstruction of how I use AI and agentic tools as a Product Owner
 to move from messy user input to reviewed, traceable, codebase-aware requirements.
 
+**The centerpiece** is the skill I built and use at work: it takes a roadmap item (PRI, a high-level
+customer need) plus software design notes, breaks it into milestones the team can commit to, and drafts
+user stories with user need statements and acceptance criteria. Teams see a realistic picture of what
+will ship much earlier, so we can plan extra testing, resources or time before committing. Here it is
+rebuilt as `skills/04-pri-to-stories`, with a deterministic checker and a readiness report.
+
 > **Why a sandbox?** The original workflow was built inside my current employer's environment,
 > on proprietary code and real customer feedback. Nothing from that environment is in this repo.
 > Everything here — the codebase, the users, the feedback — is fictional and synthetic, built
@@ -11,6 +17,15 @@ to move from messy user input to reviewed, traceable, codebase-aware requirement
 ## The workflow in one picture
 
 ```
+ roadmap item (PRI) + design notes ──► [Skill 4] milestones + user story drafts
+                      │
+                      ▼
+            [Guardrail] check_stories.py  ── fails on fake citations, uncovered requirements,
+                      │                       missing user needs, vague acceptance criteria;
+                      │                       prints a readiness report per milestone
+                      ▼
+                 HUMAN REVIEW (PO + dev lead + QA) → backlog
+
  messy user feedback ──► [Skill 1] problem framing ──► HUMAN REVIEW (PO)
                                                           │
                                                           ▼
@@ -40,8 +55,9 @@ to move from messy user input to reviewed, traceable, codebase-aware requirement
 |---|---|
 | `sandbox_codebase/` | "LabBridge" — a tiny fictional instrument-to-LIS middleware (ASTM in → QC check → HL7 out, with an audit log). Has passing unit tests. |
 | `inputs/feedback/` | Synthetic feedback from fictional lab users. The starting ambiguity. |
+| `inputs/roadmap/`, `inputs/design/` | A fictional roadmap item (PRI-001) and its software design notes (DES-001). Input to Skill 4. |
 | `skills/` | Reusable instructions run in an LLM (I use Claude). Each defines inputs, output format, and rules that make output checkable. |
-| `workflow/` | Deterministic Python scripts — no AI. Code indexer, citation verifier, traceability checker. |
+| `workflow/` | Deterministic Python scripts — no AI. Code indexer, citation verifier, traceability checker, story checker. |
 | `traceability/` | Requirements, risks and tests as CSVs, linked by ID. |
 | `examples/` | Saved AI outputs, including one with a planted hallucination that the verifier catches. |
 | `evals/` | Rubric and review checklist used to judge AI output quality. |
@@ -64,9 +80,18 @@ python workflow/verify_citations.py examples/impact_analysis_hallucinated.md
 
 # 4. Check traceability coverage
 python workflow/trace_check.py
+
+# 5. Check a PRI -> milestones -> stories plan: the good one passes, the flawed one fails
+python workflow/check_stories.py examples/stories_PRI-001.md
+python workflow/check_stories.py examples/stories_PRI-001_flawed.md
 ```
 
 ## Planted on purpose
+- `examples/stories_PRI-001_flawed.md` leaves a requirement uncovered, uses "promptly" in an
+  acceptance criterion, cites a function that doesn't exist, paraphrases a user quote, skips a
+  user need statement and points a story at a milestone that doesn't exist. `check_stories.py`
+  catches all of them. It also contains one override criterion that would release a QC-reject
+  result. That one is well formed, so no script catches it; the human safety review does.
 - `examples/impact_analysis_hallucinated.md` cites a function and a file that don't exist, plus
   an unknown risk ID. The verifier fails it.
 - `REQ-004` has no verifying test and uses the untestable word "promptly". `trace_check.py`

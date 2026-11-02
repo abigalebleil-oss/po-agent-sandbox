@@ -72,14 +72,34 @@ catches a paraphrased quote, and that trace_check finds exactly the planted gap.
 States the known limit plainly: the verifier proves a function *exists*, not that it is the
 *right* one. The hallucinated example's vague AC-1 is only caught by a human.
 
+## Step 10 — Add the PRI → milestones → user stories skill
+**What:** `skills/04-pri-to-stories`, rebuilt from the skill I use at work. Inputs: a roadmap item
+(`inputs/roadmap/PRI-001.md`), design notes (`inputs/design/DES-001_held_results.md`), the
+traceability CSVs, the code index and user feedback. Output: milestones, then user stories with
+user need statements, Given/when/then acceptance criteria, code impact and test links.
+**Why:** at work this is the skill with the clearest results. Teams get a realistic view of a
+release earlier, so testing, resourcing and timing risks show up before the commitment, not after.
+**Guardrail:** `workflow/check_stories.py` reuses the citation verifier, then checks structure:
+every PRI requirement covered, every milestone has stories, every story has a milestone, trace,
+user need and testable ACs with no vague words. It prints a **readiness report** per milestone
+(stories, ACs, NEW code items, untested requirements). In the example, M1 is the riskiest: the
+most stories, two pieces of new code and an untested requirement (REQ-004).
+**Examples:** `stories_PRI-001.md` passes; `stories_PRI-001_flawed.md` fails on six planted problems
+and contains a seventh (an unsafe override AC) that only the human review catches.
+**Verified by:** 5 new tests in `workflow/tests/test_stories.py`. **Total: 18 tests, all passing.**
+**Transparency note:** the example plans were drafted with Claude by running this skill's
+instructions. Regenerate live in the demo and compare.
+
 ---
 
 ## Suggested live demo flow (~12 of the 25 minutes)
-1. Show the three feedback files (30 sec): "this is the ambiguity."
-2. Run Skill 1 live in Claude on the feedback; run the verifier on the result (2 min).
-3. Show REQ-002 in the CSV; run Skill 2 live with the code index; verify (3 min).
-4. Run the verifier on the hallucinated example. Let the panel watch it fail (1 min).
-5. Run `trace_check.py`; show REQ-004 gap. Run Skill 3 to show the vague-wording finding (3 min).
+1. Show PRI-001 and the three feedback files (1 min): "this is the ambiguity."
+2. Run Skill 4 live in Claude on PRI-001 + DES-001; run `check_stories.py` on the result.
+   Walk the readiness report: "M1 is where we'd plan extra testing" (4 min).
+3. Run `check_stories.py` on the flawed plan. Let the panel watch it fail (1 min).
+   Then ask them to spot the one problem the script missed (the unsafe override AC).
+4. Pick one story; run Skill 2 for its requirement to show code-level impact; verify (2 min).
+5. Run `trace_check.py`; show the REQ-004 gap that the readiness report already flagged (1 min).
 6. Open the review checklist: "this is what a human still owns" (2 min).
 
 **Backup:** if live AI calls are slow, the saved examples show the same flow.
