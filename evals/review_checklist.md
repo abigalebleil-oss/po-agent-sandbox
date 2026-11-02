@@ -8,6 +8,7 @@ AI output is checked in two layers. The layers do different jobs on purpose.
 | Code citations exist | `verify_citations.py` | Hallucinated files, functions, classes |
 | Trace IDs exist | `verify_citations.py` | Invented REQ/RISK/TEST IDs |
 | Coverage complete | `trace_check.py` | Requirements with no risk or no test |
+| Delivery plan structure | `check_stories.py` | Uncovered PRI requirements, empty milestones, stories with no trace, user need or Given/when/then ACs, vague AC wording |
 
 Output that fails Layer 1 is fixed or regenerated before any human reviews it. This saves
 reviewer time and means humans never "trust" a citation.
